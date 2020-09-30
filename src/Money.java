@@ -1,15 +1,25 @@
 abstract class Money {
   protected int amount;
+  private String currency;
 
-  static Dollar dollar(int amount) {
-    return new Dollar(amount);
+  static Money dollar(int amount) {
+    return new Dollar(amount, "USD");
   }
    
   static Money franc(int amount) {
-    return new Franc(amount);
+    return new Franc(amount, "CHF");
+  }
+
+  Money(int amount, String currency) {
+    this.amount = amount;
+    this.currency = currency;
   }
 
   abstract Money times(int multiplier);
+
+  String currency() {
+      return currency;
+   }
 
   public boolean equals(Object object) {
     Money money = (Money) object;
@@ -18,19 +28,31 @@ abstract class Money {
 }
 
 class Dollar extends Money {
-  Dollar(int amount) {
-    this.amount = amount;
+
+  Dollar(int amount, String currency) {
+    super(amount, currency);
   }
-  Money times(int multiplier)  {
-    return new Dollar(amount * multiplier);
-  }	
+
+  Money times(int multiplier) {      
+    return Money.dollar(amount * multiplier);					
+  }  
+
+  String currency() {
+    return "USD";
+  }
 }
 
-class Franc extends Money {  			
-  Franc(int amount) {      
-    this.amount= amount;
-  }					
+class Franc extends Money {
+
+  Franc(int amount, String currency) {      
+    super(amount, currency);
+  }				
+
   Money times(int multiplier) {      
-    return new Franc(amount * multiplier);					
-  }   				
+    return Money.franc(amount * multiplier);					
+  }  	
+ 			
+  String currency() {
+    return "CHF";
+  }	
 }
